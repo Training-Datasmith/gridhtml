@@ -150,7 +150,8 @@ class GridHtml extends ModuleGridEngine
         if (!isset($params['defaultSortDirection'])) {
             $params['defaultSortDirection'] = false;
         }
-        $html .= '		$("#grid_1 tbody").append(newLine);
+
+        return $html . ('		$("#grid_1 tbody").append(newLine);
 						});
 					else
 						$("#grid_1 tbody").append("<tr><td class=\"center\" colspan=\"" + ' . count($params['columns']) . ' + "\">' . $params['emptyMsg'] . '</td></tr>");
@@ -186,9 +187,7 @@ class GridHtml extends ModuleGridEngine
 			}
 
 			$(document).ready(function(){getGridData("' . $grider . '&sort=' . urlencode($params['defaultSortColumn']) . '&dir=' . urlencode($params['defaultSortDirection']) . $customParams . '");});
-		</script>';
-
-        return $html;
+		</script>');
     }
 
     public function setColumnsInfos(&$infos)
