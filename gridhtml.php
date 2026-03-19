@@ -130,7 +130,7 @@ class GridHtml extends ModuleGridEngine
 				$.get(url, "", function(json) {
 					$("#grid_1 tbody").html("");
 					var array = $.parseJSON(json);
-					$("#grid_1 tfoot tr th").html("' . addslashes($params['pagingMessage']) . '");
+					$("#grid_1 tfoot tr th").html(' . json_encode((string) $params['pagingMessage']) . ');
 					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{0}", array["from"]));
 					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{1}", array["to"]));
 					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{2}", array["total"]));
@@ -156,7 +156,7 @@ class GridHtml extends ModuleGridEngine
         return $html . ('		$("#grid_1 tbody").append(newLine);
 						});
 					else
-						$("#grid_1 tbody").append("<tr><td class=\"center\" colspan=\"" + ' . count($params['columns']) . ' + "\">' . $params['emptyMsg'] . '</td></tr>");
+						$("#grid_1 tbody").append("<tr><td class=\"center\" colspan=\"" + ' . count($params['columns']) . ' + "\">' . htmlspecialchars((string) $params['emptyMsg'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</td></tr>");
 				});
 			}
 
