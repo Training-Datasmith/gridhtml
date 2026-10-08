@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="suite">
+            <file>tests/phpunit/GridHtmlGuardTest.php</file>
+            <file>tests/phpunit/GridHtmlModuleTest.php</file>
+            <file>tests/phpunit/GridHtmlHookTest.php</file>
+            <file>tests/phpunit/GridHtmlRenderTest.php</file>
+            <file>tests/phpunit/DirectoryIndexTest.php</file>
+            <file>tests/phpunit/ConfigXmlTest.php</file>
+            <file>tests/phpunit/ComposerJsonTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

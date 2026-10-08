@@ -99,7 +99,11 @@ class GridHtml extends ModuleGridEngine
     {
         self::$_columns = $params['columns'];
         if (!isset($params['emptyMsg'])) {
-            $params['emptyMsg'] = 'Empty';
+            if (isset($params['emptyMessage'])) {
+                $params['emptyMsg'] = $params['emptyMessage'];
+            } else {
+                $params['emptyMsg'] = 'Empty';
+            }
         }
 
         $customParams = '';
