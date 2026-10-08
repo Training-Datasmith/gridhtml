@@ -47,6 +47,14 @@ run_phpunit() {
     php -d error_reporting=-1 /tools/"$phar" --configuration phpunit.xml.dist "$@"
 }
 
+run_phpunit48_seeded() {
+  local image="$1"
+  local seed="$2"
+  docker run --rm -e PHPUNIT48_PHAR=/tools/phpunit-4.8.36.phar \
+    -v "$REPO_ROOT":/app -w /app -v "$TOOLS_DIR":/tools "$image" \
+    php -d error_reporting=-1 /app/tests/docker/run-phpunit48-seeded-order.php "${seed}"
+}
+
 select_floor_image() {
   if docker run --rm "php:5.4-cli@${PHP54_DIGEST}" php -r 'echo PHP_VERSION;' >/tmp/gridhtml-php54-version.txt 2>/tmp/gridhtml-php54-version.err; then
     FLOOR_VERSION="$(cat /tmp/gridhtml-php54-version.txt)"
@@ -82,8 +90,17 @@ select_floor_image() {
 FLOOR_IMAGE="$(select_floor_image)"
 FLOOR_VERSION="$(docker run --rm "$FLOOR_IMAGE" php -r 'echo PHP_VERSION;')"
 
-echo "Running floor suite on ${FLOOR_IMAGE} (${FLOOR_VERSION})"
+echo "Running floor suite (default order, pass 1) on ${FLOOR_IMAGE} (${FLOOR_VERSION})"
 run_phpunit "$FLOOR_IMAGE" phpunit-4.8.36.phar
+
+echo "Running floor suite (default order, pass 2) on ${FLOOR_IMAGE} (${FLOOR_VERSION})"
+run_phpunit "$FLOOR_IMAGE" phpunit-4.8.36.phar
+
+echo "Running floor suite (seeded order, seed ${RANDOM_SEED}, pass 1) on ${FLOOR_IMAGE} (${FLOOR_VERSION})"
+run_phpunit48_seeded "$FLOOR_IMAGE" "${RANDOM_SEED}"
+
+echo "Running floor suite (seeded order, seed ${RANDOM_SEED}, pass 2) on ${FLOOR_IMAGE} (${FLOOR_VERSION})"
+run_phpunit48_seeded "$FLOOR_IMAGE" "${RANDOM_SEED}"
 
 echo "Running PHP 8.1 default-order suite"
 run_phpunit "php:8.1.32-cli@${PHP81_DIGEST}" phpunit-9.6.23.phar
