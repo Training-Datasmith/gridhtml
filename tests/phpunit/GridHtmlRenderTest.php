@@ -25,6 +25,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         return $decoded;
     }
 
+    /** Breaks if one-based `from` (`start + 1`) or `to` clamping against `total` is removed. */
     public function testFirstPageClampsToTotal()
     {
         $decoded = $this->renderGrid(array(), 10, 0, 40);
@@ -35,6 +36,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame(array(), $decoded['values']);
     }
 
+    /** Breaks if `from` stops being `start + 1` for non-zero offsets. */
     public function testMiddlePageIsOneBased()
     {
         $decoded = $this->renderGrid(array(array('a' => 1)), 100, 40, 40);
@@ -45,6 +47,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame(array(array('a' => 1)), $decoded['values']);
     }
 
+    /** Breaks if `to` is no longer `min(start + limit, total)`. */
     public function testLastPartialPageClampsTo()
     {
         $decoded = $this->renderGrid(array(), 90, 80, 40);
@@ -53,6 +56,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame(90, $decoded['to']);
     }
 
+    /** Breaks if zero-total pages stop returning `from`/`to` of 0. */
     public function testEmptyTotalIsZeroWindow()
     {
         $decoded = $this->renderGrid(array(), 0, 0, 40);
@@ -63,6 +67,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame(array(), $decoded['values']);
     }
 
+    /** Breaks if `setLimit` stops casting `start` and `limit` to integers. */
     public function testSetLimitCastsNumericStrings()
     {
         $grid = new GridHtml('grid');
@@ -81,6 +86,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame(90, $decoded['to']);
     }
 
+    /** Breaks if `setValues` appends instead of replacing prior rows. */
     public function testSetValuesReplacesPreviousRows()
     {
         $grid = new GridHtml('grid');
@@ -96,6 +102,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame(array(array('name' => 'second')), $decoded['values']);
     }
 
+    /** Breaks if row order or UTF-8 cell values are not preserved in JSON output. */
     public function testValuesRoundTripInOrder()
     {
         $values = array(
@@ -107,6 +114,7 @@ class GridHtmlRenderTest extends GridHtmlTestCase
         $this->assertSame($values, $decoded['values']);
     }
 
+    /** Breaks if render state becomes static/shared between engine instances. */
     public function testEnginesDoNotShareRowState()
     {
         $first = new GridHtml('first');
