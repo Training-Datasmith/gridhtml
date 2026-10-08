@@ -11,6 +11,7 @@ class ConfigXmlTest extends GridHtmlTestCase
         $this->assertSame($module->version, (string) $xml->version);
         $this->assertSame($module->author, (string) $xml->author);
         $this->assertSame($module->tab, (string) $xml->tab);
+        $this->assertTrue(isset($xml->need_instance));
         $this->assertSame((int) $module->need_instance, (int) $xml->need_instance);
     }
 }

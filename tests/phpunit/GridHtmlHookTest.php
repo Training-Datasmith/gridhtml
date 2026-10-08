@@ -36,6 +36,22 @@ class GridHtmlHookTest extends GridHtmlTestCase
         $this->assertSame(2, gridhtml_extract_footer_colspan($html));
     }
 
+    public function testColspanMatchesSingleColumnGrid()
+    {
+        $params = gridhtml_hook_params(
+            array(
+                'columns' => array(
+                    array('header' => 'Only', 'dataIndex' => 'only'),
+                ),
+            )
+        );
+
+        $html = GridHtml::hookGridEngine($params, $this->grider);
+
+        $this->assertSame(1, gridhtml_extract_footer_colspan($html));
+        $this->assertTrue(preg_match('/colspan="1"/', $html) === 1);
+    }
+
     public function testGivenEmptyMessageIsEmbedded()
     {
         $html = GridHtml::hookGridEngine(
@@ -67,6 +83,18 @@ class GridHtmlHookTest extends GridHtmlTestCase
 
         $this->assertTrue(strpos($html, 'Empty recordset returned') !== false);
         $this->assertFalse(strpos($html, '>Empty</td>') !== false);
+    }
+
+    public function testEmptyMessageAliasEscapesQuotesForJavascript()
+    {
+        $params = gridhtml_hook_params();
+        unset($params['emptyMsg']);
+        $params['emptyMessage'] = 'No "rows"';
+
+        $html = GridHtml::hookGridEngine($params, $this->grider);
+
+        $this->assertTrue(strpos($html, 'No \"rows\"') !== false);
+        $this->assertFalse(strpos($html, 'No "rows"') !== false);
     }
 
     public function testEmptyMsgPrecedenceOverEmptyMessage()

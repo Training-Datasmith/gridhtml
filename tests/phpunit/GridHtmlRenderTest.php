@@ -39,10 +39,10 @@ class GridHtmlRenderTest extends GridHtmlTestCase
     /** Breaks if `from` stops being `start + 1` for non-zero offsets. */
     public function testMiddlePageIsOneBased()
     {
-        $decoded = $this->renderGrid(array(array('a' => 1)), 100, 40, 40);
+        $decoded = $this->renderGrid(array(array('a' => 1)), 100, 20, 25);
 
-        $this->assertSame(41, $decoded['from']);
-        $this->assertSame(80, $decoded['to']);
+        $this->assertSame(21, $decoded['from']);
+        $this->assertSame(45, $decoded['to']);
         $this->assertSame(100, $decoded['total']);
         $this->assertSame(array(array('a' => 1)), $decoded['values']);
     }

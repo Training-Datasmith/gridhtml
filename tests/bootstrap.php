@@ -293,16 +293,16 @@ function gridhtml_extract_ready_url($html)
 
 function gridhtml_column_has_align($html, $dataIndex, $align)
 {
-    $needle = 'align=\"' . $align . '\">" + row["' . $dataIndex . '"]';
+    $pattern = "/newLine\s*\+=\s*\"<td\s+align=\\\\\"" . preg_quote($align, '/') . "\\\\\"\s*>\"\s*\+\s*row\\[\"" . preg_quote($dataIndex, '/') . "\"\\]/";
 
-    return strpos($html, $needle) !== false;
+    return preg_match($pattern, $html) === 1;
 }
 
 function gridhtml_column_has_no_align($html, $dataIndex)
 {
-    $needle = '+= "<td>" + row["' . $dataIndex . '"]';
+    $pattern = '/newLine\s*\+=\s*"<td\s*>"\s*\+\s*row\["' . preg_quote($dataIndex, '/') . '"\]/';
 
-    return strpos($html, $needle) !== false;
+    return preg_match($pattern, $html) === 1;
 }
 
 function gridhtml_stop_directory_server()
